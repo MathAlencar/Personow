@@ -1,18 +1,19 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter} from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { dadosExercicio } from "@/app/http/exercicios/get-all-exercicio";
+import { dadosExercicio, } from "@/app/http/exercicios/get-all-exercicio";
+import { getExercicioById } from "@/app/http/exercicios/get-exercicio-by-id";
 
 export default function ExercicioDetalhes() {
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
+
 
   const id = Number(params.id);
-  const dadosUrl = searchParams.get("dados");
+
 
   const [exercicio, setExercicio] = useState<dadosExercicio | null>(null);
   
@@ -21,22 +22,15 @@ export default function ExercicioDetalhes() {
 }, [exercicio]);
 
 
-  useEffect(() => {
-    // Se veio pela URL → usar diretamente
-    if (dadosUrl) {
-      try {
-        const exercicioObj = JSON.parse(dadosUrl);
-        setExercicio(exercicioObj);
-        return;
-      } catch (err) {
-        console.error("Erro ao converter dados da URL:", err);
-      }
-    }
+ 
+useEffect(() => {
+  async function load() {
+    const exercicio = await getExercicioById(id);
+    setExercicio(exercicio);
+  }
 
-    // Se quiser depois implementar GET por ID:
-    // fetchExercicioById(id);
-
-  }, [id, dadosUrl]);
+  load();
+}, [id]);
 
   if (!exercicio) {
     return (
@@ -47,8 +41,8 @@ export default function ExercicioDetalhes() {
   }
 
   return (
-    <div className="min-h-screen bg-purple-900 text-white p-4">
-      <header className="flex items-center gap-4 mb-4">
+    <div className=" text-white mt-6">
+      <header className="flex items-center p-2 gap-4 mb-4">
         <button onClick={() => router.back()} className="text-orange-400">
           <ChevronLeft className="size-6" />
         </button>
@@ -57,14 +51,14 @@ export default function ExercicioDetalhes() {
         </h1>
       </header>
 
-      <div className="bg-purple-800 rounded-2xl p-4 space-y-4">
+      <div className="bg-purple-900 rounded-t-3xl rounded-b-none p-4 space-y-8  min-h-screen">
         <video controls className="w-full h-64 rounded-md">
           <source
             src={exercicio.videoExercicios?.[0]?.url}
             type="video/mp4"
           />
         </video>
-
+      <div className="font-semibold">Descrição</div>
         <p>{exercicio.descricao}</p>
       </div>
     </div>

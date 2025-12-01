@@ -70,7 +70,10 @@ export default {
           900: "#FF7712",
           800: "#FFA40B",
         },
-
+           yellow:{
+          900: "#FFEE58",
+        },
+     
         "background-web": "var(--color-background)", // Fundo
         "card-web": "var(--color-card)", // Cor do card
         "text-web": "var(--color-text)", // Texto principal

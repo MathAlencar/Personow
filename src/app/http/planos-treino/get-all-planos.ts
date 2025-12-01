@@ -50,6 +50,7 @@ export async function getAllPlano(idAluno: number) {
       .get(`plano/personal/aluno/planos/${idAluno}`)
       .json<getAllPlanoResponse>();
     return response.result;
+ 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.response) {
