@@ -73,7 +73,8 @@ export function ChatScreen({ chat }: ChatScreenProps) {
     };
 
     try {
-      await createMessage(NewMessage);
+      const msg = await createMessage(NewMessage);
+      setmensagens((prev) => [...prev, msg]);
       if (messageInput.current) messageInput.current.value = "";
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
