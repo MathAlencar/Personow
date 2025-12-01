@@ -1,9 +1,9 @@
 // app/socket/socket.ts
 import { io, Socket } from "socket.io-client";
 
-export const socket: Socket = io("http://34.39.211.212:3018", {
+export const socket: Socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
   transports: ["websocket"],
-  autoConnect: false, // importante para evitar conectar no SSR
+  autoConnect: false,
 });
 
 export function connectSocket() {
