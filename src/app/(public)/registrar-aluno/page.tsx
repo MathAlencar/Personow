@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import createAluno from '@/app/http/aluno/create-aluno'
 import { profileAluno } from '@/app/http/aluno/profile-aluno'
+import { alertError } from '@/components/alert'
 import { Label } from '@/components/label'
 import { Background } from '@/components/svg/background'
 import { Button } from '@/components/ui/button'
@@ -60,9 +61,28 @@ export default function RegisterAluno() {
 
       // 4️⃣ Redireciona para /alunos/home
       router.push("/alunos/home")
-    } catch (error) {
-      console.error('Erro ao cadastrar e logar:', error)
-      alert("Falha no cadastro ou login automático.")
+    } catch (error: any) {
+      console.error("Erro ao cadastrar:", error);
+
+      let msg = "Falha no cadastro. Tente novamente.";
+
+      if (error?.response) {
+        try {
+          const bodyText = await error.response.text();
+
+          let body;
+          try {
+            body = JSON.parse(bodyText);
+          } catch {
+            body = bodyText;
+          }
+          msg = body?.message || body?.error || JSON.stringify(body, null, 2);
+        } catch {
+          msg = "Erro nas informações.";
+        }
+      }
+
+    alertError(msg);
     }
   }
 
