@@ -107,6 +107,8 @@ export default function AtualizarPersonal() {
                 fill
                 priority
                 className="object-cover"
+                sizes="12"
+                unoptimized
               />
             </div>
 
